@@ -117,7 +117,7 @@ ${LOG_DIR}/*.log {
 	rotate 7
 	compress
 	missingok
-	notifyempty
+	notifempty
 	create 0640 ${APP_USER} ${APP_USER}
 }
 EOF
