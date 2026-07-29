@@ -50,7 +50,7 @@ install_packages() {
 		else
 			sudo -v
                         echo "Installing $pkg package"
-			if $pkg == 'docker'; then
+			if [ "$pkg" == 'docker-ce' ]; then
 				install_docker
 			else
 			sudo apt install "$pkg" -y
@@ -159,13 +159,24 @@ EOF
 	sudo systemctl enable nginx
 }
 
+install_awscli() {
+    log "Installing AWS CLI..."
+    sudo apt install -y unzip
+    curl -fsSL "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "/tmp/awscliv2.zip"
+    unzip -q /tmp/awscliv2.zip -d /tmp
+    sudo /tmp/aws/install
+    rm -rf /tmp/awscliv2.zip /tmp/aws
+}
+
+main() {
+log "Provisioning Started"
 #1. update packages
 update_packages
 
 #2. Install Nginx, Nodejs and Npm Packages
 install_packages
 
-
+install_awscli
 create_app_user
 
 setup_log_rotation
@@ -175,3 +186,6 @@ setup_s3_backup_cron
 deploy_landing_page
 
 log "Provisioning complete"
+}
+
+main
